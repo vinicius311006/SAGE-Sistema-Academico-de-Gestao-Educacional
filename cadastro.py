@@ -1,3 +1,10 @@
+"""
+Arquivo da Tela de Cadastro (cadastro.py)
+
+Este módulo define a classe 'Cadastro', permitindo que
+novos usuários criem uma conta no sistema.
+"""
+
 import customtkinter as ctk
 from database import conectar, hash_senha
 import re
@@ -6,15 +13,23 @@ import sqlite3
 class Cadastro(ctk.CTkFrame):
     """
     Frame (tela) de Cadastro de Usuário.
-    Atualizado com centralização vertical.
+    Herda de ctk.CTkFrame e é gerenciado pelo 'Aplicativo' principal.
     """
     
     GEOMETRIA = "850x650" # Tamanho Padrão
 
     def __init__(self, parent, controlador):
+        """
+        Inicializa o frame de Cadastro.
+
+        Args:
+            parent (ctk.CTkFrame): O frame container principal.
+            controlador (Aplicativo): A instância da aplicação principal.
+        """
         super().__init__(parent, fg_color="#D9D9D9") 
         self.controlador = controlador
 
+        # --- Layout do Card (idêntico ao Login) ---
         self.card_frame = ctk.CTkFrame(self, fg_color="#F0F0F0", corner_radius=20)
         self.card_frame.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.9, relheight=0.9)
 
@@ -86,9 +101,11 @@ class Cadastro(ctk.CTkFrame):
                                            text_color="white", width=200, height=40, corner_radius=10)
         self.btn_cadastrar.pack(pady=(20, 10))
 
+        # Label de Status
         self.status = ctk.CTkLabel(self.content_frame, text="", text_color="red")
         self.status.pack(pady=5)
         
+        # Botão Voltar (como texto)
         self.btn_voltar = ctk.CTkButton(self.content_frame, text="entrar", command=self.voltar, 
                                         fg_color="transparent", hover_color="#F0F0F0",
                                         text_color="#24232F", font=("Segoe UI", 13))
@@ -96,12 +113,15 @@ class Cadastro(ctk.CTkFrame):
         # --- Fim do Painel Direito ---
 
     def cadastrar(self):
-        # (Lógica sem alteração)
+        """
+        Valida os dados do formulário e cadastra um novo usuário no banco.
+        """
         nome = self.nome.get().strip()
         email = self.email.get().strip()
         senha = self.senha.get()
         confirmar_senha = self.confirmar_senha.get()
 
+        # Validações de entrada
         if not nome or not email or not senha or not confirmar_senha:
             self.status.configure(text="Preencha todos os campos.", text_color="red")
             return
@@ -116,15 +136,21 @@ class Cadastro(ctk.CTkFrame):
             return
             
         try:
+            # Tenta inserir o novo usuário no banco
             with conectar() as conn:
                 cursor = conn.cursor()
+                # Usa a função hash_senha para criptografar
                 cursor.execute("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)", (nome, email, hash_senha(senha)))
+            
             self.status.configure(text="Usuário cadastrado com sucesso!", text_color="green")
+            # Limpa todos os campos
             self.nome.delete(0, 'end')
             self.email.delete(0, 'end')
             self.senha.delete(0, 'end')
             self.confirmar_senha.delete(0, 'end')
+            
         except sqlite3.IntegrityError:
+            # Erro específico para quando o e-mail já existe (violando a restrição UNIQUE)
             self.status.configure(text="Erro: e-mail já cadastrado.", text_color="red")
         except sqlite3.Error as e:
             self.status.configure(text=f"Erro no banco: {str(e)}", text_color="red")
@@ -132,7 +158,9 @@ class Cadastro(ctk.CTkFrame):
             self.status.configure(text=f"Erro inesperado: {str(e)}", text_color="red")
 
     def voltar(self):
-        # (Lógica sem alteração)
+        """
+        Navega de volta para a tela de Login, limpando os campos.
+        """
         self.status.configure(text="")
         self.nome.delete(0, 'end')
         self.email.delete(0, 'end')

@@ -1,3 +1,10 @@
+"""
+Arquivo da Tela de Turma (turma.py)
+
+Este módulo define a classe 'Turma', permitindo ao usuário
+cadastrar novas turmas (ex: "3º Ano A", "2º Ano B").
+"""
+
 import customtkinter as ctk
 from database import conectar
 import sqlite3
@@ -11,9 +18,17 @@ class Turma(ctk.CTkFrame):
     GEOMETRIA = "850x650" # Tamanho Padrão
 
     def __init__(self, parent, controlador):
+        """
+        Inicializa o frame de Cadastro de Turma.
+        
+        Args:
+            parent (ctk.CTkFrame): O frame container principal.
+            controlador (Aplicativo): A instância da aplicação principal.
+        """
         super().__init__(parent, fg_color="#D9D9D9")
         self.controlador = controlador
 
+        # --- Layout do Card (idêntico ao Login) ---
         self.card_frame = ctk.CTkFrame(self, fg_color="#F0F0F0", corner_radius=20)
         self.card_frame.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.9, relheight=0.9)
 
@@ -39,6 +54,7 @@ class Turma(ctk.CTkFrame):
         
         ctk.CTkLabel(self.content_frame, text="Cadastro de Turma", font=("Segoe UI", 36, "bold"), text_color="#24232F").pack(pady=30)
 
+        # Campo Nome da Turma
         self.nome = ctk.CTkEntry(self.content_frame,
                                  placeholder_text="Nome da Turma", 
                                  width=300, height=40,
@@ -48,6 +64,7 @@ class Turma(ctk.CTkFrame):
                                  placeholder_text_color="#888888")
         self.nome.pack(pady=10)
 
+        # Botão Salvar
         self.btn_salvar = ctk.CTkButton(self.content_frame,
                                         text="Salvar", command=self.salvar_turma, 
                                         fg_color="#24232F", hover_color="#3A3A46", 
@@ -57,6 +74,7 @@ class Turma(ctk.CTkFrame):
         self.status = ctk.CTkLabel(self.content_frame, text="", text_color="green")
         self.status.pack(pady=10)
 
+        # Botão Voltar
         self.btn_voltar = ctk.CTkButton(self.content_frame,
                                         text="Voltar", command=self.voltar, 
                                         fg_color="#A9A9A9", text_color="#24232F", 
@@ -65,24 +83,30 @@ class Turma(ctk.CTkFrame):
         # --- Fim do Painel Direito ---
 
     def salvar_turma(self):
-        # (Lógica sem alteração)
+        """
+        Valida o campo e salva a nova turma no banco de dados.
+        """
         nome = self.nome.get().strip()
         if not nome:
             self.status.configure(text="Preencha o nome da turma.", text_color="red")
             return
+
         try:
             with conectar() as conn:
                 cursor = conn.cursor()
                 cursor.execute("INSERT INTO turmas (nome) VALUES (?)", (nome,))
+            
             self.status.configure(text="Turma cadastrada com sucesso!", text_color="green")
-            self.nome.delete(0, 'end')
+            self.nome.delete(0, 'end') # Limpa o campo
         except sqlite3.Error as e:
             self.status.configure(text=f"Erro no banco: {str(e)}", text_color="red")
         except Exception as e:
             self.status.configure(text=f"Erro: {str(e)}", text_color="red")
 
     def voltar(self):
-        # (Lógica sem alteração)
+        """
+        Navega de volta para o Menu Principal.
+        """
         self.status.configure(text="")
         self.nome.delete(0, 'end')
         self.controlador.mostrar_tela("MenuPrincipal")

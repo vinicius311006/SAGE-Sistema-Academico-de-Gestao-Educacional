@@ -1,17 +1,32 @@
+"""
+Arquivo da Tela do Chatbot (chatbot.py)
+
+Este módulo define a classe 'Chatbot', que cumpre o requisito de IA
+do PIM[cite: 94], fornecendo um "chatbot básico para dúvidas frequentes".
+"""
+
 import customtkinter as ctk
 
 class Chatbot(ctk.CTkFrame):
     """
     Frame (tela) do Chatbot Acadêmico.
-    Atualizado para o novo design de card.
+    Atualizado com o layout corrigido (scroll e alinhamento).
     """
     
-    GEOMETRIA = "900x750" # Tamanho Padrão
+    GEOMETRIA = "850x650" # Tamanho Padrão
 
     def __init__(self, parent, controlador):
+        """
+        Inicializa o frame do Chatbot.
+
+        Args:
+            parent (ctk.CTkFrame): O frame container principal.
+            controlador (Aplicativo): A instância da aplicação principal.
+        """
         super().__init__(parent, fg_color="#D9D9D9")
         self.controlador = controlador
 
+        # --- Layout do Card (Padrão) ---
         self.card_frame = ctk.CTkFrame(self, fg_color="#F0F0F0", corner_radius=20)
         self.card_frame.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.9, relheight=0.9)
 
@@ -33,6 +48,7 @@ class Chatbot(ctk.CTkFrame):
         
         ctk.CTkLabel(self.painel_direito, text="Assistente Acadêmico", font=("Segoe UI", 36, "bold"), text_color="#24232F").pack(pady=20)
 
+        # Perguntas pré-definidas (requisito do PIM [cite: 94])
         perguntas = [
             "Como cadastrar aluno?",
             "Como registrar aula?",
@@ -45,29 +61,46 @@ class Chatbot(ctk.CTkFrame):
         frame_perguntas = ctk.CTkFrame(self.painel_direito, fg_color="transparent")
         frame_perguntas.pack(pady=10)
 
+        # Cria os botões de pergunta
         for texto in perguntas:
             ctk.CTkButton(frame_perguntas, text=texto, command=lambda t=texto: self.responder(t),
                           fg_color="#24232F", hover_color="#3A3A46", 
                           text_color="white", width=300, height=35, corner_radius=10).pack(pady=5)
 
-        self.resposta_frame = ctk.CTkFrame(self.painel_direito, fg_color="transparent")
-        self.resposta_frame.pack(pady=20, padx=10, fill="both", expand=True) 
-
-        self.resposta = ctk.CTkLabel(self.resposta_frame, text="Clique em uma pergunta para ver a resposta.", 
-                                     wraplength=400, font=("Segoe UI", 14), 
-                                     text_color="#444444", justify="left")
-        self.resposta.pack(pady=20, padx=10)
-
+        # Botão Voltar (empacotado no final)
         self.btn_voltar = ctk.CTkButton(self.painel_direito, text="Voltar", command=self.voltar, 
                                         fg_color="#A9A9A9", text_color="#24232F", 
                                         hover_color="#B9B9B9", width=150, height=35, corner_radius=10)
         self.btn_voltar.pack(pady=10, side="bottom") 
+
+        # Frame da Resposta (com rolagem)
+        self.resposta_frame = ctk.CTkScrollableFrame(self.painel_direito, fg_color="#EAEAEA", corner_radius=10)
+        self.resposta_frame.pack(pady=20, padx=10, fill="both", expand=True) 
+
+        # Configura o grid interno do frame de rolagem para o padding funcionar
+        self.resposta_frame.grid_columnconfigure(0, weight=1)
+
+        self.resposta = ctk.CTkLabel(self.resposta_frame, text="Clique em uma pergunta para ver a resposta.", 
+                                     wraplength=400, # Largura máxima do texto
+                                     font=("Segoe UI", 14), 
+                                     text_color="#444444", justify="left")
+        
+        # Usa .grid() para forçar o alinhamento e o padding
+        self.resposta.grid(row=0, column=0, pady=20, padx=10, sticky="w")
         # --- Fim do Painel Direito ---
 
     def responder(self, pergunta):
-        # (Lógica sem alteração)
+        """
+        Exibe a resposta correspondente à pergunta clicada.
+        Esta é a funcionalidade de "IA" (chatbot básico).
+        
+        Args:
+            pergunta (str): O texto do botão que foi clicado.
+        """
         try:
             texto = pergunta.lower()
+            
+            # Base de conhecimento simples (FAQ)
             faq = {
                 "cadastrar aluno": "Vá ao menu principal e clique em 'Cadastrar Aluno'. Preencha nome e selecione turma. Lembre-se de cadastrar uma turma primeiro!",
                 "registrar aula": "Use a opção 'Registrar Aula'. Selecione a turma, a data e o tema. Os alunos carregarão automaticamente. Marque os presentes e clique em 'Salvar'.",
@@ -76,16 +109,20 @@ class Chatbot(ctk.CTkFrame):
                 "usar o chatbot": "Este é o chatbot! Você clica em uma das perguntas pré-definidas e eu mostro a resposta aqui. Simples assim.",
                 "erro no sistema": "1. Verifique se o arquivo 'sistema_escolar.db' está na mesma pasta. \n2. Verifique se todas as dependências do 'requirements.txt' estão instaladas. \n3. Se um erro persistir, tente apagar o arquivo .db e reiniciar o app para criar um banco de dados limpo."
             }
+            
             resposta_encontrada = "Desculpe, não entendi. Tente reformular."
             for chave in faq:
                 if chave in texto:
                     resposta_encontrada = faq[chave]
                     break
+            
             self.resposta.configure(text=resposta_encontrada, text_color="#24232F") 
         except Exception as e:
             self.resposta.configure(text=f"Erro inesperado: {str(e)}. Tente novamente.", text_color="red")
 
     def voltar(self):
-        # (Lógica sem alteração)
+        """
+        Navega de volta para o Menu Principal e reseta o texto da resposta.
+        """
         self.resposta.configure(text="Clique em uma pergunta para ver a resposta.", text_color="#444444")
         self.controlador.mostrar_tela("MenuPrincipal")

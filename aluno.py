@@ -1,3 +1,10 @@
+"""
+Arquivo da Tela de Aluno (aluno.py)
+
+Este módulo define a classe 'Aluno', permitindo ao usuário
+cadastrar novos alunos e associá-los a uma turma existente.
+"""
+
 import customtkinter as ctk
 from database import conectar
 import sqlite3
@@ -11,9 +18,17 @@ class Aluno(ctk.CTkFrame):
     GEOMETRIA = "850x650" # Tamanho Padrão
 
     def __init__(self, parent, controlador):
+        """
+        Inicializa o frame de Cadastro de Aluno.
+
+        Args:
+            parent (ctk.CTkFrame): O frame container principal.
+            controlador (Aplicativo): A instância da aplicação principal.
+        """
         super().__init__(parent, fg_color="#D9D9D9")
         self.controlador = controlador
 
+        # --- Layout do Card (idêntico ao Login) ---
         self.card_frame = ctk.CTkFrame(self, fg_color="#F0F0F0", corner_radius=20)
         self.card_frame.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.9, relheight=0.9)
 
@@ -39,9 +54,11 @@ class Aluno(ctk.CTkFrame):
         
         ctk.CTkLabel(self.content_frame, text="Cadastro de Aluno", font=("Segoe UI", 36, "bold"), text_color="#24232F").pack(pady=30)
 
+        # Carrega as turmas para o dropdown
         self.turmas = self.carregar_turmas()
         self.turma_selecionada = ctk.StringVar(value=self.turmas[0] if self.turmas else "Nenhuma turma cadastrada")
         
+        # Dropdown de Turmas
         self.dropdown_turma = ctk.CTkOptionMenu(self.content_frame,
                                                 values=self.turmas, 
                                                 variable=self.turma_selecionada, 
@@ -55,6 +72,7 @@ class Aluno(ctk.CTkFrame):
                                                 dropdown_text_color="#24232F")
         self.dropdown_turma.pack(pady=10)
 
+        # Campo Nome do Aluno
         self.nome = ctk.CTkEntry(self.content_frame,
                                  placeholder_text="Nome do Aluno", 
                                  width=300, height=40,
@@ -64,6 +82,7 @@ class Aluno(ctk.CTkFrame):
                                  placeholder_text_color="#888888")
         self.nome.pack(pady=10)
 
+        # Botão Salvar
         self.btn_salvar = ctk.CTkButton(self.content_frame,
                                         text="Salvar", command=self.salvar_aluno, 
                                         fg_color="#24232F", hover_color="#3A3A46", 
@@ -73,6 +92,7 @@ class Aluno(ctk.CTkFrame):
         self.status = ctk.CTkLabel(self.content_frame, text="", text_color="red")
         self.status.pack(pady=10)
 
+        # Botão Voltar
         self.btn_voltar = ctk.CTkButton(self.content_frame,
                                         text="Voltar", command=self.voltar, 
                                         fg_color="#A9A9A9", text_color="#24232F", 
@@ -80,53 +100,77 @@ class Aluno(ctk.CTkFrame):
         self.btn_voltar.pack(pady=10)
         # --- Fim do Painel Direito ---
         
+        # O evento <Visibility> é disparado quando o frame fica visível
+        # Usamos isso para recarregar as turmas caso uma nova tenha sido criada
         self.bind("<Visibility>", self.atualizar_turmas)
 
     def atualizar_turmas(self, event=None):
-        # (Lógica sem alteração)
+        """
+        Recarrega a lista de turmas do banco e atualiza o dropdown.
+        Chamado quando a tela se torna visível.
+        """
         print("Atualizando lista de turmas...")
         self.turmas = self.carregar_turmas()
         default_value = self.turmas[0] if self.turmas else "Nenhuma turma cadastrada"
+        
+        # Atualiza o dropdown com os novos valores
         if self.turmas:
             self.dropdown_turma.configure(values=self.turmas)
             self.dropdown_turma.set(default_value)
         else:
+            # Caso não haja turmas, exibe uma mensagem padrão
             self.dropdown_turma.configure(values=["Nenhuma turma cadastrada"])
             self.dropdown_turma.set("Nenhuma turma cadastrada")
 
     def carregar_turmas(self):
-        # (Lógica sem alteração)
+        """
+        Busca a lista de turmas no banco de dados.
+        
+        Returns:
+            list: Lista de strings formatadas como "ID - Nome" ou lista vazia.
+        """
         try:
             with conectar() as conn:
                 cursor = conn.cursor()
                 cursor.execute("SELECT id, nome FROM turmas ORDER BY nome")
                 turmas = cursor.fetchall()
+                # Formata a lista para exibição (ex: "1 - 3º Ano A")
                 return [f"{id} - {nome}" for id, nome in turmas]
         except sqlite3.Error as e:
             self.status.configure(text=f"Erro ao carregar turmas: {e}", text_color="red")
             return []
 
     def salvar_aluno(self):
-        # (Lógica sem alteração)
+        """
+        Valida os campos e salva o novo aluno no banco de dados.
+        """
         nome = self.nome.get().strip()
         turma_str = self.turma_selecionada.get()
+
         if not nome or not turma_str or turma_str == "Nenhuma turma cadastrada":
             self.status.configure(text="Preencha nome e selecione turma.", text_color="red")
             return
+
         try:
+            # Extrai o ID da string "ID - Nome"
             turma_id = turma_str.split(" - ")[0]
+            
             with conectar() as conn:
                 cursor = conn.cursor()
                 cursor.execute("INSERT INTO alunos (nome, turma_id) VALUES (?, ?)", (nome, turma_id))
+            
             self.status.configure(text="Aluno cadastrado com sucesso!", text_color="green")
-            self.nome.delete(0, 'end') 
+            self.nome.delete(0, 'end') # Limpa o campo
         except sqlite3.Error as e:
             self.status.configure(text=f"Erro no banco: {str(e)}", text_color="red")
         except Exception as e:
+            # Captura outros erros (ex: split falha se a string estiver mal formatada)
             self.status.configure(text=f"Erro: {str(e)}", text_color="red")
 
     def voltar(self):
-        # (Lógica sem alteração)
+        """
+        Navega de volta para o Menu Principal.
+        """
         self.status.configure(text="") 
         self.nome.delete(0, 'end') 
         self.controlador.mostrar_tela("MenuPrincipal")

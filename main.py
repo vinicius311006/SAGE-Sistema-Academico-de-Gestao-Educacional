@@ -1,7 +1,11 @@
+"""
+Arquivo Principal (main.py) - SAGE (Sistema Acadêmico de Gestão Educacional)
+"""
+
 import customtkinter as ctk
 from database import criar_tabelas
 
-# Importa todas as "telas" (que são Frames)
+# Importa todas as classes de tela dos seus respectivos arquivos .py
 from login import Login
 from cadastro import Cadastro
 from menu import MenuPrincipal
@@ -11,34 +15,37 @@ from aula import Aula
 from visualizacao import Visualizacao
 from relatorio import Relatorio
 from chatbot import Chatbot
+from atividades import Atividades # <-- 1. IMPORTA A NOVA TELA
 
 class Aplicativo(ctk.CTk):
     """
     Classe principal da aplicação (Controlador).
-    Esta janela única gerencia todos os "frames" (telas) da aplicação,
-    trocando entre eles conforme a necessidade.
     """
+    
     def __init__(self):
+        """
+        Inicializa a janela principal e todos os frames.
+        """
         super().__init__()
         
         self.title("SAGE - Sistema Acadêmico de Gestão Educacional")
-        self.geometry("850x650") # Geometria padrão inicial
+        self.geometry("850x650") 
+        self.resizable(False, False) 
 
-        ctk.set_appearance_mode("dark") # Mantemos 'dark' para a barra de título
+        ctk.set_appearance_mode("dark") 
         ctk.set_default_color_theme("blue")
 
-        # Container principal onde todos os frames (telas) serão empilhados
         container = ctk.CTkFrame(self, fg_color="#24232F")
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        # Dicionário para armazenar todas as telas
         self.frames = {}
 
-        # Lista de todas as classes de tela para inicializar
+        # Tupla com todas as classes de tela que devem ser carregadas
         telas = (Login, Cadastro, MenuPrincipal, Aluno, Turma, 
-                 Aula, Visualizacao, Relatorio, Chatbot)
+                 Aula, Visualizacao, Relatorio, Chatbot,
+                 Atividades) # <-- 2. ADICIONA A NOVA TELA AQUI
 
         # Itera sobre as classes de tela, criando uma instância de cada
         for F in telas:
@@ -52,19 +59,14 @@ class Aplicativo(ctk.CTk):
 
     def mostrar_tela(self, nome_tela):
         """
-        Traz um frame (tela) para a frente e ajusta o tamanho da janela.
+        Traz um frame (tela) específico para a frente.
         """
         frame = self.frames[nome_tela]
-        
-        if hasattr(frame, 'GEOMETRIA'):
-            self.geometry(frame.GEOMETRIA)
-        else:
-            self.geometry("700x600") 
-            
         frame.tkraise()
 
+# Ponto de entrada da aplicação
 if __name__ == "__main__":
     print("Criando tabelas do banco de dados (se não existirem)...")
     criar_tabelas() 
-    app = Aplicativo()
+    app = Aplicativo() 
     app.mainloop()
