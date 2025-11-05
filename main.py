@@ -29,7 +29,7 @@ class Aplicativo(ctk.CTk):
         super().__init__()
         
         self.title("SAGE - Sistema Acadêmico de Gestão Educacional")
-        self.geometry("850x650") 
+        self.geometry("950x650") 
         self.resizable(False, False) 
 
         ctk.set_appearance_mode("dark") 
