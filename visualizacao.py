@@ -219,7 +219,7 @@ class Visualizacao(ctk.CTkFrame):
             text=f"Digite o novo nome para {nome_atual}:",
             
             fg_color="#F0F0F0",
-            title_color="#24232F",
+            #title_color="#24232F",
             text_color="#24232F",
             
             entry_fg_color="white",
@@ -230,9 +230,9 @@ class Visualizacao(ctk.CTkFrame):
             button_hover_color="#3A3A46",
             button_text_color="white",
             
-            cancel_button_fg_color="#A9A9A9",
-            cancel_button_hover_color="#B9B9B9",
-            cancel_button_text_color="#24232F"
+            #cancel_button_fg_color="#A9A9A9",
+            #cancel_button_hover_color="#B9B9B9",
+            #cancel_button_text_color="#24232F"
         )
         # --- Fim do Estilo ---
         
