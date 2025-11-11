@@ -1,8 +1,7 @@
 """
 Arquivo da Tela de Atividades (atividades.py)
 
-Este módulo define a classe 'Atividades', cumprindo o requisito do PIM
-de "Cadastro e consulta de atividades". Permite:
+Permite:
 1. Cadastrar uma nova atividade (ex: Prova, Trabalho) para uma turma.
 2. Consultar, editar e deletar atividades existentes.
 """
@@ -12,7 +11,7 @@ from database import conectar
 from tkcalendar import Calendar
 import datetime
 import sqlite3
-# Importa os pop-ups de diálogo que vamos usar
+# Importa os pop-ups de diálogo
 from dialogos import JanelaConfirmacao, JanelaEditarAtividade 
 
 class Atividades(ctk.CTkFrame):
@@ -37,7 +36,7 @@ class Atividades(ctk.CTkFrame):
         self.card_frame = ctk.CTkFrame(self, fg_color="#F0F0F0", corner_radius=20)
         self.card_frame.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.9, relheight=0.9)
 
-        # --- Painel Esquerdo (SAGE Branding - CENTRALIZADO) ---
+        # --- Painel Esquerdo ---
         self.painel_esquerdo = ctk.CTkFrame(self.card_frame, fg_color="#24232F", corner_radius=15, width=300)
         self.painel_esquerdo.pack(side="left", fill="both", expand=False, padx=15, pady=15)
         self.painel_esquerdo.pack_propagate(False)
@@ -49,7 +48,7 @@ class Atividades(ctk.CTkFrame):
         ctk.CTkFrame(self.painel_esquerdo, fg_color="transparent").pack(side="bottom", fill="both", expand=True)
         # --- Fim do Painel Esquerdo ---
 
-        # --- Painel Direito (Conteúdo) ---
+        # --- Painel Direito ---
         self.painel_direito = ctk.CTkFrame(self.card_frame, fg_color="transparent")
         self.painel_direito.pack(side="right", fill="both", expand=True, padx=20, pady=15)
         
@@ -103,9 +102,6 @@ class Atividades(ctk.CTkFrame):
 
         ctk.CTkLabel(self.painel_direito, text="Atividades Cadastradas", font=("Segoe UI", 16, "bold"), text_color="#24232F").pack(pady=(10,0))
         
-        # --- INÍCIO DA CORREÇÃO DE LAYOUT ---
-        # 1. Empacota os widgets de baixo (Botão Voltar e Status) PRIMEIRO
-        
         self.status = ctk.CTkLabel(self.painel_direito, text="", text_color="red")
         self.status.pack(pady=5, side="bottom")
         
@@ -114,10 +110,9 @@ class Atividades(ctk.CTkFrame):
                                         hover_color="#B9B9B9", width=150, height=35, corner_radius=10)
         self.btn_voltar.pack(pady=10, side="bottom")
 
-        # 2. Empacota o frame de rolagem (meio) por ÚLTIMO, para que ele expanda
+        # Empacota o frame de rolagem (meio) por ÚLTIMO, para que ele expanda
         self.frame_atividades = ctk.CTkScrollableFrame(self.painel_direito, fg_color="#EAEAEA", corner_radius=10)
         self.frame_atividades.pack(pady=10, fill="both", expand=True, padx=20)
-        # --- FIM DA CORREÇÃO DE LAYOUT ---
 
         # --- Carga Inicial ---
         self.bind("<Visibility>", self.atualizar_tela)
@@ -134,7 +129,6 @@ class Atividades(ctk.CTkFrame):
             self.descricao.insert("0.0", "Descrição da atividade...")
             self.descricao.configure(text_color="#888888")
 
-    # --- Funções Principais (CRUD) ---
     def carregar_turmas(self):
         """Busca e retorna a lista de turmas do banco."""
         try:

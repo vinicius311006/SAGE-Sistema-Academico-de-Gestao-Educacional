@@ -17,7 +17,6 @@ import datetime
 class JanelaConfirmacao(ctk.CTkToplevel):
     """
     Uma janela de diálogo modal para confirmação (Sim/Não).
-    (Estilo claro)
     """
     def __init__(self, parent, title="Confirmar", text="Tem certeza?"):
         """
@@ -66,7 +65,6 @@ class JanelaConfirmacao(ctk.CTkToplevel):
 class JanelaEditarAula(ctk.CTkToplevel):
     """
     Uma janela de diálogo modal para EDITAR os detalhes e a PRESENÇA de uma Aula.
-    (Estilo claro, padronizado com o app principal)
     """
     def __init__(self, parent, aula_id, data_atual, tema_atual, desc_atual):
         """
@@ -242,12 +240,9 @@ class JanelaEditarAula(ctk.CTkToplevel):
             self.descricao.insert("0.0", self.desc_placeholder)
             self.descricao.configure(text_color="#888888") 
 
-
-# --- NOVA CLASSE ADICIONADA ---
 class JanelaEditarAtividade(ctk.CTkToplevel):
     """
     Uma janela de diálogo modal para EDITAR os detalhes de uma Atividade.
-    (Estilo claro, padronizado com o app principal)
     """
     def __init__(self, parent, ativ_id, nome_atual, data_atual, desc_atual):
         """
@@ -268,7 +263,7 @@ class JanelaEditarAtividade(ctk.CTkToplevel):
 
         ctk.CTkLabel(self, text="Editar Detalhes da Atividade", font=("Segoe UI", 24, "bold"), text_color="#24232F").pack(pady=10)
 
-        # Campos de formulário com estilo claro
+        # Campos de formulário
         self.nome = ctk.CTkEntry(self, width=300, height=40,
                                  fg_color="white", border_color="#E0E0E0", border_width=1,
                                  text_color="#24232F", placeholder_text_color="#888888")

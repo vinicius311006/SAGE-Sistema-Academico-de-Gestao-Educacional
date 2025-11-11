@@ -35,7 +35,7 @@ class Aula(ctk.CTkFrame):
         super().__init__(parent, fg_color="#D9D9D9")
         self.controlador = controlador
 
-        # --- Card e Painel Esquerdo (Padrão) ---
+        # --- Card e Painel Esquerdo ---
         self.card_frame = ctk.CTkFrame(self, fg_color="#F0F0F0", corner_radius=20)
         self.card_frame.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.95, relheight=0.9) # 95% para mais espaço
 
@@ -50,7 +50,7 @@ class Aula(ctk.CTkFrame):
         ctk.CTkFrame(self.painel_esquerdo, fg_color="transparent").pack(side="bottom", fill="both", expand=True)
         # --- Fim do Painel Esquerdo ---
 
-        # --- Painel Direito (Layout Corrigido) ---
+        # --- Painel Direito ---
         self.painel_direito = ctk.CTkFrame(self.card_frame, fg_color="transparent")
         self.painel_direito.pack(side="right", fill="both", expand=True, padx=20, pady=15)
 

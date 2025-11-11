@@ -44,7 +44,7 @@ class Turma(ctk.CTkFrame):
         ctk.CTkFrame(self.painel_esquerdo, fg_color="transparent").pack(side="bottom", fill="both", expand=True)
         # --- Fim do Painel Esquerdo ---
 
-        # --- Painel Direito (Formulário - CENTRALIZADO) ---
+        # --- Painel Direito ---
         self.painel_direito = ctk.CTkFrame(self.card_frame, fg_color="transparent")
         self.painel_direito.pack(side="right", fill="both", expand=True, padx=20, pady=15)
 

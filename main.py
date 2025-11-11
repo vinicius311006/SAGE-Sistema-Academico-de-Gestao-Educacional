@@ -15,7 +15,7 @@ from aula import Aula
 from visualizacao import Visualizacao
 from relatorio import Relatorio
 from chatbot import Chatbot
-from atividades import Atividades # <-- 1. IMPORTA A NOVA TELA
+from atividades import Atividades
 
 class Aplicativo(ctk.CTk):
     """
@@ -45,7 +45,7 @@ class Aplicativo(ctk.CTk):
         # Tupla com todas as classes de tela que devem ser carregadas
         telas = (Login, Cadastro, MenuPrincipal, Aluno, Turma, 
                  Aula, Visualizacao, Relatorio, Chatbot,
-                 Atividades) # <-- 2. ADICIONA A NOVA TELA AQUI
+                 Atividades)
 
         # Itera sobre as classes de tela, criando uma instância de cada
         for F in telas:

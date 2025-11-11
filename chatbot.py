@@ -1,8 +1,8 @@
 """
 Arquivo da Tela do Chatbot (chatbot.py)
 
-Este módulo define a classe 'Chatbot', que cumpre o requisito de IA
-do PIM[cite: 94], fornecendo um "chatbot básico para dúvidas frequentes".
+Este módulo define a classe 'Chatbot', que cumpre o requisito de IA, 
+fornecendo um "chatbot básico para dúvidas frequentes".
 """
 
 import customtkinter as ctk
@@ -10,7 +10,6 @@ import customtkinter as ctk
 class Chatbot(ctk.CTkFrame):
     """
     Frame (tela) do Chatbot Acadêmico.
-    Atualizado com o layout corrigido (scroll e alinhamento).
     """
     
     GEOMETRIA = "850x650" # Tamanho Padrão
@@ -26,11 +25,11 @@ class Chatbot(ctk.CTkFrame):
         super().__init__(parent, fg_color="#D9D9D9")
         self.controlador = controlador
 
-        # --- Layout do Card (Padrão) ---
+        # --- Layout do Card ---
         self.card_frame = ctk.CTkFrame(self, fg_color="#F0F0F0", corner_radius=20)
         self.card_frame.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.9, relheight=0.9)
 
-        # --- Painel Esquerdo (SAGE Branding - CENTRALIZADO) ---
+        # --- Painel Esquerdo ---
         self.painel_esquerdo = ctk.CTkFrame(self.card_frame, fg_color="#24232F", corner_radius=15, width=300)
         self.painel_esquerdo.pack(side="left", fill="both", expand=False, padx=15, pady=15)
         self.painel_esquerdo.pack_propagate(False)
@@ -48,7 +47,7 @@ class Chatbot(ctk.CTkFrame):
         
         ctk.CTkLabel(self.painel_direito, text="Assistente Acadêmico", font=("Segoe UI", 36, "bold"), text_color="#24232F").pack(pady=20)
 
-        # Perguntas pré-definidas (requisito do PIM [cite: 94])
+        # Perguntas pré-definidas
         perguntas = [
             "Como cadastrar aluno?",
             "Como registrar aula?",

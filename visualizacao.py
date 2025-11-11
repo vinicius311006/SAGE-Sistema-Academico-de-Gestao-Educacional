@@ -37,7 +37,7 @@ class Visualizacao(ctk.CTkFrame):
         self.card_frame = ctk.CTkFrame(self, fg_color="#F0F0F0", corner_radius=20)
         self.card_frame.place(relx=0.5, rely=0.5, anchor="center", relwidth=0.9, relheight=0.9)
 
-        # --- Painel Esquerdo (SAGE Branding - CENTRALIZADO) ---
+        # --- Painel Esquerdo ---
         self.painel_esquerdo = ctk.CTkFrame(self.card_frame, fg_color="#24232F", corner_radius=15, width=300)
         self.painel_esquerdo.pack(side="left", fill="both", expand=False, padx=15, pady=15)
         self.painel_esquerdo.pack_propagate(False)
