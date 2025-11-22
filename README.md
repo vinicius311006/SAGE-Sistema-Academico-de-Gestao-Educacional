@@ -35,7 +35,7 @@ Este projeto foi desenvolvido como o **Projeto Integrado Multidisciplinar (PIM I
 
 1.  Clone este repositório:
     ```bash
-    git clone [https://github.com/vinicius311006/SAGE-Sistema-Academico-de-Gestao-Educacional.git](https://github.com/vinicius311006/SAGE-Sistema-Academico-de-Gestao-Educacional.git)
+    git clone https://github.com/vinicius311006/SAGE-Sistema-Academico-de-Gestao-Educacional.git
     ```
 
 2.  Navegue até a pasta do projeto:
